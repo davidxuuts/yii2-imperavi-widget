@@ -5,10 +5,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @see https://github.com/vova07/yii2-imperavi-widget
+ * @see https://github.com/davidxuuts/yii2-imperavi-widget
  */
 
-namespace vova07\imperavi;
+namespace davidxu\imperavi;
 
 use Yii;
 use yii\base\InvalidConfigException;
@@ -27,16 +27,17 @@ use yii\web\JsExpression;
  * @property array $plugins JS Redactor plugins
  *
  * @author Vasile Crudu <bazillio07@yandex.ru>
+ * @author David Xu <david.xu.uts@163.com>
  *
- * @link https://github.com/vova07/yii2-imperavi-widget
+ * @link https://github.com/davidxuuts/yii2-imperavi-widget
  * @link https://imperavi.com/assets/pdf/redactor-documentation-10.pdf
  *
- * @license https://github.com/vova07/yii2-imperavi-widget/blob/master/LICENSE.md
+ * @license https://github.com/davidxuuts/yii2-imperavi-widget/blob/master/LICENSE.md
  */
 class Widget extends BaseWidget
 {
     /** Name of inline JavaScript package that is registered by the widget */
-    const INLINE_JS_KEY = 'vova07/imperavi/';
+    const INLINE_JS_KEY = 'davidxu/imperavi/';
 
     /**
      * @var Model|null The data model that this widget is associated with.
@@ -129,6 +130,14 @@ class Widget extends BaseWidget
             $this->settings['uploadImageFields'][$request->csrfParam] = $request->getCsrfToken();
             $this->settings['uploadFileFields'][$request->csrfParam] = $request->getCsrfToken();
         }
+        $this->settings['uploadImageFields']['x:member_id'] = Yii::$app->user->isGuest ? 0 : Yii::$app->user->id;
+        $this->settings['uploadFileFields']['x:member_id'] = Yii::$app->user->isGuest ? 0 : Yii::$app->user->id;
+        $this->settings['uploadImageFields']['x:year'] = date('Y');
+        $this->settings['uploadFileFields']['x:year'] = date('Y');
+        $this->settings['uploadImageFields']['x:month'] = date('m');
+        $this->settings['uploadFileFields']['x:month'] = date('m');
+        $this->settings['uploadImageFields']['x:day'] = date('d');
+        $this->settings['uploadFileFields']['x:day'] = date('d');
         // @codeCoverageIgnoreEnd
 
         parent::init();
@@ -157,13 +166,16 @@ class Widget extends BaseWidget
      */
     public static function registerTranslations()
     {
-        if (!isset(Yii::$app->i18n->translations['vova07/imperavi']) && !isset(Yii::$app->i18n->translations['vova07/imperavi*'])) {
-            Yii::$app->i18n->translations['vova07/imperavi'] = [
+        if (
+                !isset(Yii::$app->i18n->translations['davidxu/imperavi']) 
+                && !isset(Yii::$app->i18n->translations['davidxu/imperavi*'])
+        ) {
+            Yii::$app->i18n->translations['davidxu/imperavi'] = [
                 'class' => 'yii\i18n\PhpMessageSource',
-                'basePath' => '@vova07/imperavi/messages',
+                'basePath' => '@davidxu/imperavi/messages',
                 'forceTranslation' => true,
                 'fileMap' => [
-                    'vova07/imperavi' => 'imperavi.php',
+                    'davidxu/imperavi' => 'imperavi.php',
                 ],
             ];
         }
@@ -193,12 +205,12 @@ class Widget extends BaseWidget
     protected function registerDefaultCallbacks()
     {
         if (isset($this->settings['imageUpload']) && !isset($this->settings['imageUploadErrorCallback'])) {
-            $message = Yii::t('vova07/imperavi', 'ERROR_DURING_UPLOAD_PROCESS');
+            $message = Yii::t('davidxu/imperavi', 'ERROR_DURING_UPLOAD_PROCESS');
 
             $this->settings['imageUploadErrorCallback'] = new JsExpression('function (response) { alert("' . $message . '"); }');
         }
         if (isset($this->settings['fileUpload']) && !isset($this->settings['fileUploadErrorCallback'])) {
-            $message = Yii::t('vova07/imperavi', 'ERROR_DURING_UPLOAD_PROCESS');
+            $message = Yii::t('davidxu/imperavi', 'ERROR_DURING_UPLOAD_PROCESS');
 
             $this->settings['fileUploadErrorCallback'] = new JsExpression('function (response) { alert("' . $message . '"); }');
         }
@@ -231,6 +243,7 @@ class Widget extends BaseWidget
         $selector = Json::encode($this->selector);
         $settings = !empty($this->settings) ? Json::encode($this->settings) : '';
 
-        $view->registerJs("jQuery($selector).redactor($settings);", $view::POS_READY, self::INLINE_JS_KEY . $this->options['id']);
+        $this->settings = $settings;
+        $view->registerJs("jQuery($selector).redactor($this->settings);", $view::POS_READY, self::INLINE_JS_KEY . $this->options['id']);
     }
 }

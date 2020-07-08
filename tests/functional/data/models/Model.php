@@ -8,7 +8,7 @@
  * @see https://github.com/vova07/yii2-imperavi-widget
  */
 
-namespace vova07\imperavi\tests\functional\data\models;
+namespace davidxu\imperavi\tests\functional\data\models;
 
 use yii\db\ActiveRecord;
 use yii\db\Connection;

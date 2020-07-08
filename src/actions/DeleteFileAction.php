@@ -5,12 +5,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @see https://github.com/vova07/yii2-imperavi-widget
+ * @see https://github.com/davidxu/yii2-imperavi-widget
  */
 
-namespace vova07\imperavi\actions;
+namespace davidxu\imperavi\actions;
 
-use vova07\imperavi\Widget;
+use davidxu\imperavi\Widget;
 use Yii;
 use yii\base\Action;
 use yii\base\InvalidConfigException;
@@ -27,7 +27,7 @@ use yii\web\Response;
  * {
  *     return [
  *         'delete-file' => [
- *             'class' => 'vova07\imperavi\actions\DeleteFileAction',
+ *             'class' => 'davidxu\imperavi\actions\DeleteFileAction',
  *             'url' => 'http://my-site.com/statics/',
  *             'path' => '/var/www/my-site.com/web/statics',
  *         ],
@@ -36,8 +36,9 @@ use yii\web\Response;
  * ```
  *
  * @author Vasile Crudu <bazillio07@yandex.ru>
+ * @author David Xu <david.xu.uts@163.com>
  *
- * @link https://github.com/vova07/yii2-imperavi-widget
+ * @link https://github.com/davidxuuts/yii2-imperavi-widget
  */
 class DeleteFileAction extends Action
 {
@@ -86,17 +87,17 @@ class DeleteFileAction extends Action
             $fileName = Yii::$app->request->post($this->attribute, null);
 
             if ($fileName === null) {
-                return ['error' => Yii::t('vova07/imperavi', 'ERROR_FILE_IDENTIFIER_MUST_BE_PROVIDED')];
+                return ['error' => Yii::t('davidxu/imperavi', 'ERROR_FILE_IDENTIFIER_MUST_BE_PROVIDED')];
             }
 
             $file = $this->path . DIRECTORY_SEPARATOR . $fileName;
 
             if (!file_exists($file)) {
-                return ['error' => Yii::t('vova07/imperavi', 'ERROR_FILE_DOES_NOT_EXIST')];
+                return ['error' => Yii::t('davidxu/imperavi', 'ERROR_FILE_DOES_NOT_EXIST')];
             }
 
             if (!unlink($file)) {
-                return ['error' => Yii::t('vova07/imperavi', 'ERROR_CANNOT_REMOVE_FILE')];
+                return ['error' => Yii::t('davidxu/imperavi', 'ERROR_CANNOT_REMOVE_FILE')];
             }
 
             return ['url' => $this->url . urlencode($fileName)];

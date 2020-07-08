@@ -5,10 +5,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @see https://github.com/vova07/yii2-imperavi-widget
+ * @see https://github.com/davidxuuts/yii2-imperavi-widget
  */
 
-namespace vova07\imperavi\actions;
+namespace davidxu\imperavi\actions;
 
 use Yii;
 use yii\base\Action;
@@ -27,7 +27,7 @@ use yii\web\Response;
  * {
  *     return [
  *         'get-image' => [
- *             'class' => 'vova07\imperavi\actions\GetImagesAction',
+ *             'class' => 'davidxu\imperavi\actions\GetImagesAction',
  *             'url' => 'http://my-site.com/statics/',
  *             'path' => '/var/www/my-site.com/web/statics',
  *             'options' => ['only' => ['*.jpg', '*.jpeg', '*.png', '*.gif', '*.ico']],
@@ -37,6 +37,7 @@ use yii\web\Response;
  * ```
  *
  * @author Vasile Crudu <bazillio07@yandex.ru>
+ * @author David Xu <david.xu.uts@163.com>
  *
  * @link https://github.com/vova07
  */

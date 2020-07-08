@@ -8,10 +8,10 @@
  * @see https://github.com/vova07/yii2-imperavi-widget
  */
 
-namespace vova07\imperavi\tests\functional\data\overrides;
+namespace davidxu\imperavi\tests\functional\data\overrides;
 
-use vova07\imperavi\Asset;
-use vova07\imperavi\Widget;
+use davidxu\imperavi\Asset;
+use davidxu\imperavi\Widget;
 use Yii;
 
 /**

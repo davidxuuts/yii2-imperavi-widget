@@ -8,7 +8,7 @@
  * @see https://github.com/vova07/yii2-imperavi-widget
  */
 
-namespace vova07\imperavi\tests\functional;
+namespace davidxu\imperavi\tests\functional;
 
 use ReflectionClass;
 use vova07\imperavi\tests\functional\data\bundles\TestPlugin;
@@ -187,7 +187,7 @@ final class WidgetTest extends TestCase
         $view = $this->getView();
         $widget->setView($view);
         $method->invoke($widget);
-        $test = 'jQuery("#test-id").redactor({"lang":"ru","plugins":["testPlugin"]});';
+        $test = 'jQuery("#test-id").redactor({"lang":"zh_cn","plugins":["testPlugin"]});';
         $inlineJSKey = TestWidget::INLINE_JS_KEY . 'test-id';
 
         $this->assertArrayHasKey($inlineJSKey, $view->js[View::POS_READY]);
@@ -212,7 +212,7 @@ final class WidgetTest extends TestCase
                 'model' => $model,
                 'attribute' => 'message',
                 'settings' => [
-                    'lang' => 'ru',
+                    'lang' => 'zh_cn',
                     'minHeight' => 200,
                     'plugins' => [
                         'clips',
@@ -254,15 +254,15 @@ final class WidgetTest extends TestCase
         $method->invoke($widget);
         $test = [
             'class' => 'yii\i18n\PhpMessageSource',
-            'basePath' => '@vova07/imperavi/messages',
+            'basePath' => '@davidxu/imperavi/messages',
             'forceTranslation' => true,
             'fileMap' => [
-                'vova07/imperavi' => 'imperavi.php',
+                'davidxu/imperavi' => 'imperavi.php',
             ],
         ];
 
-        $this->assertArrayHasKey('vova07/imperavi', Yii::$app->i18n->translations);
-        $this->assertSame($test, Yii::$app->i18n->translations['vova07/imperavi']);
+        $this->assertArrayHasKey('davidxu/imperavi', Yii::$app->i18n->translations);
+        $this->assertSame($test, Yii::$app->i18n->translations['davidxu/imperavi']);
     }
 
     /**
@@ -287,7 +287,7 @@ final class WidgetTest extends TestCase
             [
                 'name' => 'message2',
                 'settings' => [
-                    'lang' => 'ru',
+                    'lang' => 'zh_cn',
                 ],
             ]
         );
@@ -326,7 +326,7 @@ final class WidgetTest extends TestCase
             [
                 'name' => 'message',
                 'settings' => [
-                    'lang' => 'ru',
+                    'lang' => 'zh_cn',
                 ],
             ]
         );
@@ -337,7 +337,7 @@ final class WidgetTest extends TestCase
                     'lang' => 'uk',
                 ],
                 'defaultSettings' => [
-                    'lang' => 'ru',
+                    'lang' => 'zh_cn',
                     'minHeight' => 200,
                 ],
             ]
@@ -346,7 +346,7 @@ final class WidgetTest extends TestCase
         $method->invoke($widget2);
 
         $this->assertArrayHasKey('lang', $widget->settings);
-        $this->assertSame('ru', $widget->settings['lang']);
+        $this->assertSame('zh_cn', $widget->settings['lang']);
         $this->assertArrayHasKey('lang', $widget2->settings);
         $this->assertArrayHasKey('minHeight', $widget2->settings);
         $this->assertSame('uk', $widget2->settings['lang']);

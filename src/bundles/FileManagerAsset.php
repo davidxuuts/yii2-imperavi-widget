@@ -8,7 +8,7 @@
  * @see https://github.com/vova07/yii2-imperavi-widget
  */
 
-namespace vova07\imperavi\bundles;
+namespace davidxu\imperavi\bundles;
 
 use yii\web\AssetBundle;
 
@@ -22,7 +22,7 @@ class FileManagerAsset extends AssetBundle
     /**
      * @inheritdoc
      */
-    public $sourcePath = '@vova07/imperavi/assets';
+    public $sourcePath = '@davidxu/imperavi/assets';
 
     /**
      * @inheritdoc

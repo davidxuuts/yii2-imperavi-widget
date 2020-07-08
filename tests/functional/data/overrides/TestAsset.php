@@ -8,9 +8,9 @@
  * @see https://github.com/vova07/yii2-imperavi-widget
  */
 
-namespace vova07\imperavi\tests\functional\data\overrides;
+namespace davidxu\imperavi\tests\functional\data\overrides;
 
-use vova07\imperavi\Asset;
+use davidxu\imperavi\Asset;
 
 /**
  * @author Vasile Crudu <bazillio07@yandex.ru>
@@ -22,5 +22,5 @@ final class TestAsset extends Asset
     /**
      * @inheritdoc
      */
-    public $sourcePath = '@vova07/imperavi/tests/../../src/assets';
+    public $sourcePath = '@davidxu/imperavi/tests/../../src/assets';
 }

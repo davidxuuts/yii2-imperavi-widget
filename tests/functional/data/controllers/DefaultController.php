@@ -11,11 +11,11 @@
 namespace vova07\imperavi\tests\functional\data\controllers;
 
 use org\bovigo\vfs\vfsStream;
-use vova07\imperavi\actions\DeleteFileAction;
-use vova07\imperavi\actions\GetFilesAction;
-use vova07\imperavi\actions\GetImagesAction;
-use vova07\imperavi\actions\UploadFileAction;
-use vova07\imperavi\tests\functional\TestCase;
+use davidxu\imperavi\actions\DeleteFileAction;
+use davidxu\imperavi\actions\GetFilesAction;
+use davidxu\imperavi\actions\GetImagesAction;
+use davidxu\imperavi\actions\UploadFileAction;
+use davidxu\imperavi\tests\functional\TestCase;
 use yii\web\Controller;
 
 /**

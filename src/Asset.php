@@ -5,10 +5,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @see https://github.com/vova07/yii2-imperavi-widget
+ * @see https://github.com/davidxuuts/yii2-imperavi-widget
  */
 
-namespace vova07\imperavi;
+namespace davidxu\imperavi;
 
 use yii\web\AssetBundle;
 
@@ -16,15 +16,16 @@ use yii\web\AssetBundle;
  * Widget asset bundle.
  *
  * @author Vasile Crudu <bazillio07@yandex.ru>
+ * @author David Xu <david.xu.uts@163.com>
  *
- * @link https://github.com/vova07/yii2-imperavi-widget
+ * @link https://github.com/davidxuuts/yii2-imperavi-widget
  */
 class Asset extends AssetBundle
 {
     /**
      * @inheritdoc
      */
-    public $sourcePath = '@vova07/imperavi/assets';
+    public $sourcePath = '@davidxu/imperavi/assets';
 
     /**
      * @inheritdoc

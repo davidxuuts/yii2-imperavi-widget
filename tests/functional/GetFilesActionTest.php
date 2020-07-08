@@ -8,7 +8,7 @@
  * @see https://github.com/vova07/yii2-imperavi-widget
  */
 
-namespace vova07\imperavi\tests\functional;
+namespace davidxu\imperavi\tests\functional;
 
 use Yii;
 use yii\web\Response;

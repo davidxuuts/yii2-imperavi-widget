@@ -17,12 +17,12 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'ERROR_CAN_NOT_UPLOAD_FILE' => 'File could not be uploaded.',
-    'ERROR_DURING_UPLOAD_PROCESS' => 'An error occurred during the upload process!',
-    'ERROR_FILE_ALREADY_EXIST' => 'The file with such name already exist',
-    'ERROR_FILE_IDENTIFIER_MUST_BE_PROVIDED' => 'File identifier must be provided.',
-    'ERROR_FILE_DOES_NOT_EXIST' => 'Specified file does not exist.',
-    'ERROR_CANNOT_REMOVE_FILE' => 'Cannot remove the file, something goes wrong.',
-    'SUCCESS_SAVE_FILE' => 'Save file successfully',
-    'ERROR_SAVE_FILE' => 'Save file failed',
+    'ERROR_CAN_NOT_UPLOAD_FILE' => '文件上传失败',
+    'ERROR_DURING_UPLOAD_PROCESS' => '上传文件出现错误',
+    'ERROR_FILE_ALREADY_EXIST' => '已存在同名文件',
+    'ERROR_FILE_IDENTIFIER_MUST_BE_PROVIDED' => '请提供文件ID',
+    'ERROR_FILE_DOES_NOT_EXIST' => '指定的文件不存在',
+    'ERROR_CANNOT_REMOVE_FILE' => '错误:不能移除文件',
+    'SUCCESS_SAVE_FILE' => '保存文件成功',
+    'ERROR_SAVE_FILE' => '保存文件失败',
 ];

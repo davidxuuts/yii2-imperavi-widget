@@ -8,7 +8,7 @@
  * @see https://github.com/vova07/yii2-imperavi-widget
  */
 
-namespace vova07\imperavi\tests\functional\data\bundles;
+namespace davidxu\imperavi\tests\functional\data\bundles;
 
 use yii\web\AssetBundle;
 
@@ -22,7 +22,7 @@ final class TestPlugin extends AssetBundle
     /**
      * @inheritdoc
      */
-    public $sourcePath = '@vova07/imperavi/tests/../../src/assets';
+    public $sourcePath = '@davidxu/imperavi/tests/../../src/assets';
 
     /**
      * @inheritdoc
