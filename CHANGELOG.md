@@ -2,6 +2,13 @@
 
 All notable changes to `yii2-imperavi-widget` will be documented in this file.
 
+## 2.1.0
+
+### Changed
+- Add Qiniu bucket upload function
+- Change Upload related Action names to `LocalUploadFileAction` and `QiniuUploadFileAction`
+- Change Widget name to `Redactor`
+
 ## 2.0.11
 
 ### Changed

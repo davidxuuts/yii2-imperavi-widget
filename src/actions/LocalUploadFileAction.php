@@ -72,6 +72,8 @@ class LocalUploadFileAction extends Action
      */
     public $path;
 
+    public $dnsBaseUrl;
+    
     /**
      * @var string URL path to directory where files will be uploaded.
      */
@@ -128,7 +130,10 @@ class LocalUploadFileAction extends Action
         }
         if (empty($this->url) || $this->url === '') {
             $this->url = Url::to('@web/uploads');
-        }        
+        }
+        if (empty($this->dnsBaseUrl) || $this->dnsBaseUrl === '') {
+            $this->dnsBaseUrl = Url::base();
+        }
         if ($this->uploadOnlyImage !== true) {
             $this->_validator = 'file';
         }
@@ -198,7 +203,7 @@ class LocalUploadFileAction extends Action
                     if ($saveResult) {
                         $savePath = $this->path . DIRECTORY_SEPARATOR . $filePathName;
                         $result = [
-                            'filelink' => $this->url . DIRECTORY_SEPARATOR . $dest,
+                            'filelink' => $this->dnsBaseUrl . $this->url . DIRECTORY_SEPARATOR . $dest,
                             'id' => $dest,
                             'filename' => $model->file->name,
                         ];
@@ -212,7 +217,7 @@ class LocalUploadFileAction extends Action
                             );
                             $result = $attachment->attributes;
                             $extra = [
-                                'filelink' => $attachment->path,
+                                'filelink' => $this->dnsBaseUrl . $attachment->path,
                                 'filename' => $attachment->name,
                             ];
                             $result = ArrayHelper::merge($result, $extra);

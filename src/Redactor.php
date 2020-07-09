@@ -34,7 +34,7 @@ use yii\web\JsExpression;
  *
  * @license https://github.com/davidxuuts/yii2-imperavi-widget/blob/master/LICENSE.md
  */
-class Widget extends BaseWidget
+class Redactor extends BaseWidget
 {
     /** Name of inline JavaScript package that is registered by the widget */
     const INLINE_JS_KEY = 'davidxu/imperavi/';

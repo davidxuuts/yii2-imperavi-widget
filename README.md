@@ -1,11 +1,11 @@
 # Imperavi Redactor Widget for Yii 2
 
-[![Latest Version](https://img.shields.io/github/tag/vova07/yii2-imperavi-widget.svg?style=flat-square&label=release)](https://github.com/vova07/yii2-imperavi-widget/releases)
+[![Latest Version](https://img.shields.io/github/tag/davidxuuts/yii2-imperavi-widget.svg?style=flat-square&label=release)](https://github.com/davidxuuts/yii2-imperavi-widget/releases)
 [![Software License](https://img.shields.io/badge/license-BSD-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/vova07/yii2-imperavi-widget/master.svg?style=flat-square)](https://travis-ci.org/vova07/yii2-imperavi-widget)
-[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/vova07/yii2-imperavi-widget.svg?style=flat-square)](https://scrutinizer-ci.com/g/vova07/yii2-imperavi-widget/code-structure)
-[![Quality Score](https://img.shields.io/scrutinizer/g/vova07/yii2-imperavi-widget.svg?style=flat-square)](https://scrutinizer-ci.com/g/vova07/yii2-imperavi-widget)
-[![Total Downloads](https://img.shields.io/packagist/dt/vova07/yii2-imperavi-widget.svg?style=flat-square)](https://packagist.org/packages/vova07/yii2-imperavi-widget)
+[![Build Status](https://img.shields.io/travis/davidxuuts/yii2-imperavi-widget/master.svg?style=flat-square)](https://travis-ci.org/davidxuuts/yii2-imperavi-widget)
+[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/vova07/yii2-imperavi-widget.svg?style=flat-square)](https://scrutinizer-ci.com/g/davidxuuts/yii2-imperavi-widget/code-structure)
+[![Quality Score](https://img.shields.io/scrutinizer/g/davidxuuts/yii2-imperavi-widget.svg?style=flat-square)](https://scrutinizer-ci.com/g/davidxuuts/yii2-imperavi-widget)
+[![Total Downloads](https://img.shields.io/packagist/dt/davidxuuts/yii2-imperavi-widget.svg?style=flat-square)](https://packagist.org/packages/davidxuuts/yii2-imperavi-widget)
 
 `Imperavi Redactor Widget` is a wrapper for [Imperavi Redactor 10.2.5](https://imperavi.com/assets/pdf/redactor-documentation-10.pdf),
 a high quality WYSIWYG editor.
@@ -20,13 +20,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```bash
-$ php composer.phar require --prefer-dist vova07/yii2-imperavi-widget "*"
+$ php composer.phar require --prefer-dist davidxu/yii2-imperavi-widget "*"
 ```
 
 or add
 
 ```json
-"vova07/yii2-imperavi-widget": "*"
+"davidxu/yii2-imperavi-widget": "*"
 ```
 
 to the `require` section of your `composer.json` file.
@@ -34,15 +34,22 @@ to the `require` section of your `composer.json` file.
 
 ## Usage
 
+If file/image info stores in DB or use qiniu bucket, please implement migrations below first:
+
+```code
+yii migrate/up --migration-path @davidxu/imperavi/migrations/
+```
+
 Once the extension is installed, simply use it in your code:
 
 ### Like a widget
 
 ```php
-echo \vova07\imperavi\Widget::widget([
+echo \davidxu\imperavi\Redactor::widget([
     'name' => 'redactor',
     'settings' => [
-        'lang' => 'ru',
+        'lang' => 'zh_cn',
+        'imageUpload' => '/api/v1/redactor/upload',
         'minHeight' => 200,
         'plugins' => [
             'clips',
@@ -61,11 +68,12 @@ echo \vova07\imperavi\Widget::widget([
 ### Like an ActiveForm widget
 
 ```php
-use vova07\imperavi\Widget;
+use davidxu\imperavi\Redactor;
 
-echo $form->field($model, 'content')->widget(Widget::className(), [
+echo $form->field($model, 'content')->widget(Redactor::class, [
     'settings' => [
-        'lang' => 'ru',
+        'lang' => 'zh_cn',
+        'imageUpload' => '/api/v1/redactor/upload',
         'minHeight' => 200,
         'plugins' => [
             'clips',
@@ -84,10 +92,11 @@ echo $form->field($model, 'content')->widget(Widget::className(), [
 ### Like a widget for a predefined textarea
 
 ```php
-echo \vova07\imperavi\Widget::widget([
+echo \davidxu\imperavi\Redactor::widget([
     'selector' => '#my-textarea-id',
     'settings' => [
-        'lang' => 'ru',
+        'lang' => 'zh_cn',
+        'imageUpload' => '/api/v1/redactor/upload',
         'minHeight' => 200,
         'plugins' => [
             'clips',
@@ -103,68 +112,6 @@ echo \vova07\imperavi\Widget::widget([
 ]);
 ```
 
-### Add images that have already been uploaded
-
-```php
-// DefaultController.php
-public function actions()
-{
-    return [
-        'images-get' => [
-            'class' => 'vova07\imperavi\actions\GetImagesAction',
-            'url' => 'http://my-site.com/images/', // Directory URL address, where files are stored.
-            'path' => '@alias/to/my/path', // Or absolute path to directory where files are stored.
-            'options' => ['only' => ['*.jpg', '*.jpeg', '*.png', '*.gif', '*.ico']], // These options are by default.
-        ],
-    ];
-}
-
-// View.php
-echo \vova07\imperavi\Widget::widget([
-    'selector' => '#my-textarea-id',
-    'settings' => [
-        'lang' => 'ru',
-        'minHeight' => 200,
-        'imageUpload' => Url::to(['default/image-upload']),
-        'imageManagerJson' => Url::to(['/default/images-get']),
-        'plugins' => [
-            'imagemanager',
-        ],
-    ],
-]);
-```
-
-### Add files that have already been uploaded
-
-```php
-// DefaultController.php
-public function actions()
-{
-    return [
-        'files-get' => [
-            'class' => 'vova07\imperavi\actions\GetFilesAction',
-            'url' => 'http://my-site.com/files/', // Directory URL address, where files are stored.
-            'path' => '@alias/to/my/path', // Or absolute path to directory where files are stored.
-            'options' => ['only' => ['*.txt', '*.md']], // These options are by default.
-        ],
-    ];
-}
-
-// View.php
-echo \vova07\imperavi\Widget::widget([
-    'selector' => '#my-textarea-id',
-    'settings' => [
-        'lang' => 'ru',
-        'minHeight' => 200,
-        'fileUpload' => Url::to(['default/file-upload']),
-        'fileManagerJson' => Url::to(['/default/files-get']),
-        'plugins' => [
-            'filemanager',
-        ],
-    ],
-]);
-```
-
 ### Upload image
 
 ```php
@@ -172,19 +119,28 @@ echo \vova07\imperavi\Widget::widget([
 public function actions()
 {
     return [
-        'image-upload' => [
-            'class' => 'vova07\imperavi\actions\UploadFileAction',
-            'url' => 'http://my-site.com/images/', // Directory URL address, where files are stored.
+        'upload-local' => [
+            'class' => 'davidxu\imperavi\actions\LocalUploadFileAction',
+            'dnsBaseUrl' => 'http://my-site.com/', // Domain name or uri where files are stored, filelink will be dnsBaseUrl + url 
+            'url' => 'images/', // Directory URL address, where files are stored.
             'path' => '@alias/to/my/path', // Or absolute path to directory where files are stored.
+            'modelClass' => Attachment::class, // Please use migration first, if file/image info stored in DB
+            'storeInDB' => true, // Default true
+        ],
+        'upload-qiniu' => [
+            'class' => 'davidxu\imperavi\actions\QiniuUploadFileAction',
+            'dnsBaseUrl' => 'http://my-site.com/', // Qiniu DNS domain name, filelink will be dnsBaseUrl + url 
+            'url' => 'images/', // Qiniu key prefix, key will be url + filename.
+            'modelClass' => Attachment::class, // Please use migration first
         ],
     ];
 }
 
 // View.php
-echo \vova07\imperavi\Widget::widget([
+echo \davidxu\imperavi\Redactor::widget([
     'selector' => '#my-textarea-id',
     'settings' => [
-        'lang' => 'ru',
+        'lang' => 'zh_cn',
         'minHeight' => 200,
         'imageUpload' => Url::to(['/default/image-upload']),
         'plugins' => [
@@ -194,107 +150,13 @@ echo \vova07\imperavi\Widget::widget([
 ]);
 ```
 
-### Upload file
-
-```php
-// DefaultController.php
-public function actions()
-{
-    return [
-        'file-upload' => [
-            'class' => 'vova07\imperavi\actions\UploadFileAction',
-            'url' => 'http://my-site.com/files/', // Directory URL address, where files are stored.
-            'path' => '@alias/to/my/path', // Or absolute path to directory where files are stored.
-            'uploadOnlyImage' => false, // For any kind of files uploading.
-        ],
-    ];
-}
-
-// View.php
-echo \vova07\imperavi\Widget::widget([
-    'selector' => '#my-textarea-id',
-    'settings' => [
-        'lang' => 'ru',
-        'minHeight' => 200,
-        'fileUpload' => Url::to(['/default/file-upload']),
-        'plugins' => [
-            'filemanager',
-        ],
-    ],
-]);
-```
-
-### Upload and replace a file with the same name
-
-```php
-// DefaultController.php
-public function actions()
-{
-    return [
-        'file-upload' => [
-            'class' => 'vova07\imperavi\actions\UploadFileAction',
-            'url' => 'http://my-site.com/files/', // Directory URL address, where files are stored.
-            'path' => '@alias/to/my/path', // Or absolute path to directory where files are stored.
-            'uploadOnlyImage' => false, // For any kind of files uploading.
-            'unique' => false,
-            'replace' => true, // By default it throw an excepiton instead.
-        ],
-    ];
-}
-
-// View.php
-echo \vova07\imperavi\Widget::widget([
-    'selector' => '#my-textarea-id',
-    'settings' => [
-        'lang' => 'ru',
-        'minHeight' => 200,
-        'fileUpload' => Url::to(['/default/file-upload']),
-        'plugins' => [
-            'filemanager',
-        ],
-    ],
-]);
-```
-
-### Upload file and *translit* its name
-
-```php
-// DefaultController.php
-public function actions()
-{
-    return [
-        'file-upload' => [
-            'class' => 'vova07\imperavi\actions\UploadFileAction',
-            'url' => 'http://my-site.com/files/', // Directory URL address, where files are stored.
-            'path' => '@alias/to/my/path', // Or absolute path to directory where files are stored.
-            'uploadOnlyImage' => false, // For any kind of files uploading.
-            'unique' => false,
-            'translit' => true,
-        ],
-    ];
-}
-
-// View.php
-echo \vova07\imperavi\Widget::widget([
-    'selector' => '#my-textarea-id',
-    'settings' => [
-        'lang' => 'ru',
-        'minHeight' => 200,
-        'fileUpload' => Url::to(['/default/file-upload']),
-        'plugins' => [
-            'filemanager',
-        ],
-    ]
-]);
-```
-
 ### Add custom plugins
 
 ```php
-echo \vova07\imperavi\Widget::widget([
+echo \davidxu\imperavi\Redactor::widget([
     'selector' => '#my-textarea-id',
     'settings' => [
-        'lang' => 'ru',
+        'lang' => 'zh_cn',
         'minHeight' => 200,
         'plugins' => [
             'clips',
@@ -303,89 +165,6 @@ echo \vova07\imperavi\Widget::widget([
     ],
     'plugins' => [
         'my-custom-plugin' => 'app\assets\MyPluginBundle',
-    ],
-]);
-```
-
-### Enable custom image manager with delete functionality
-
-```php
-// DefaultController.php
-public function actions()
-{
-    return [
-        'images-get' => [
-            'class' => 'vova07\imperavi\actions\GetImagesAction',
-            'url' => 'http://my-site.com/images/', // Directory URL address, where files are stored.
-            'path' => '@alias/to/my/path', // Or absolute path to directory where files are stored.
-        ],
-        'image-upload' => [
-            'class' => 'vova07\imperavi\actions\UploadFileAction',
-            'url' => 'http://my-site.com/images/', // Directory URL address, where files are stored.
-            'path' => '@alias/to/my/path', // Or absolute path to directory where files are stored.
-        ],
-        'file-delete' => [
-            'class' => 'vova07\imperavi\actions\DeleteFileAction',
-            'url' => 'http://my-site.com/statics/', // Directory URL address, where files are stored.
-            'path' => '/var/www/my-site.com/web/statics', // Or absolute path to directory where files are stored.
-        ],
-    ];
-}
-
-// View.php
-echo \vova07\imperavi\Widget::widget([
-    'selector' => '#my-textarea-id',
-    'settings' => [
-        'lang' => 'ru',
-        'minHeight' => 200,
-        'imageUpload' => Url::to(['/default/image-upload']),
-        'imageDelete' => Url::to(['/default/file-delete']),
-        'imageManagerJson' => Url::to(['/default/images-get']),
-    ],
-    'plugins' => [
-        'imagemanager' => 'vova07\imperavi\bundles\ImageManagerAsset',              
-    ],
-]);
-```
-
-### Enable custom file manager with delete functionality
-
-```php
-// DefaultController.php
-public function actions()
-{
-    return [
-        'files-get' => [
-            'class' => 'vova07\imperavi\actions\GetFilesAction',
-            'url' => 'http://my-site.com/images/', // Directory URL address, where files are stored.
-            'path' => '@alias/to/my/path', // Or absolute path to directory where files are stored.
-        ],
-        'file-upload' => [
-            'class' => 'vova07\imperavi\actions\UploadFileAction',
-            'url' => 'http://my-site.com/files/', // Directory URL address, where files are stored.
-            'path' => '@alias/to/my/path', // Or absolute path to directory where files are stored.
-            'uploadOnlyImage' => false, // For any kind of files uploading.
-        ],
-        'file-delete' => [
-            'class' => 'vova07\imperavi\actions\DeleteFileAction',
-            'url' => 'http://my-site.com/statics/', // Directory URL address, where files are stored.
-            'path' => '/var/www/my-site.com/web/statics', // Or absolute path to directory where files are stored.
-        ],
-    ];
-}
-
-// View.php
-echo \vova07\imperavi\Widget::widget([
-    'selector' => '#my-textarea-id',
-    'settings' => [
-        'lang' => 'ru',
-        'minHeight' => 200,
-        'fileUpload' => Url::to(['/default/file-upload']),
-        'fileDelete' => Url::to(['/default/file-delete']),
-        'fileManagerJson' => Url::to(['/default/files-get']),
-    ],
-    'plugins' => [
-        'filemanager' => 'vova07\imperavi\bundles\FileManagerAsset',              
     ],
 ]);
 ```
@@ -407,6 +186,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 ## Credits
 
 - [Vasile Crudu](https://github.com/vova07)
+- [David Xu](https://github.com/davidxuuts)
 - [All Contributors](../../contributors)
 
 ## License

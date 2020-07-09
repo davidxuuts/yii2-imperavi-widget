@@ -76,7 +76,7 @@ class QiniuUploadFileAction extends Action
      * @var string URL path to directory where files will be uploaded.
      */
     public $url;
-    
+    public $dnsBaseUrl;
     /**
      * @var string Validator name
      */
@@ -168,6 +168,9 @@ class QiniuUploadFileAction extends Action
             $date = date('Ymd');
             $this->url = 'uploads/' . $date;
         }
+        if (empty($this->dnsBaseUrl) || $this->dnsBaseUrl === '') {
+            $this->dnsBaseUrl = Url::base();
+        }
         if ($this->uploadOnlyImage !== true) {
             $this->_validator = 'file';
         }
@@ -235,19 +238,18 @@ class QiniuUploadFileAction extends Action
 
         $attachment = $this->writeToDB($result);
 
-        if ($attachment['error']) {
+        if (isset($attachment['error'])) {
             return [
-                'error' => $attachment['error'];
+                'error' => $attachment['error'],
             ];
         }
         
         $extra = [
-            'filelink' => $attachment->path,
+            'filelink' => $this->dnsBaseUrl . $attachment->path,
             'filename' => $attachment->name,
         ];
-        $result = ArrayHelper::merge($attachment, $extra);
-
-        return $this->writeToDB($result);
+        $result = $attachment->attributes;
+        return ArrayHelper::merge($result, $extra);;
     }
     
     /**
@@ -256,8 +258,11 @@ class QiniuUploadFileAction extends Action
      */
     protected function writeToDB($returnResult)
     {
+        if (empty($this->modelClass) || $this->modelClass === '') {
+            $this->modelClass = Attachment::class;
+        }
         [$result, $error] = $returnResult;
-        unlink($_file->tempName);
+        unlink($this->_file->tempName);
         if ($error !== null) {
             return [
                 'error' => 'Upload to qiniu error'
@@ -265,7 +270,6 @@ class QiniuUploadFileAction extends Action
         } else {
            $model = new $this->modelClass;
            $model->attributes = $result;
-           $model->extension = $ext;
            $model->save(false);
            return $model;
         }
