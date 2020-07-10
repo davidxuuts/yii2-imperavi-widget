@@ -129,7 +129,7 @@ class LocalUploadFileAction extends Action
             $this->path = Yii::getAlias('@webroot/uploads');
         }
         if (empty($this->url) || $this->url === '') {
-            $this->url = Url::to('@web/uploads');
+            $this->url = 'uploads';
         }
         if (empty($this->dnsBaseUrl) || $this->dnsBaseUrl === '') {
             $this->dnsBaseUrl = Url::base();
@@ -148,30 +148,28 @@ class LocalUploadFileAction extends Action
     {
         if (!file_exists($this->path)) {
             if (!mkdir($this->path, 0755, true)) {
-                $result = [
+                return [
                     'error' => Yii::t('davidxu/imperavi', '{path} can not be created', [
                         'path' => $this->path,
                     ]),
                 ];
             }
-            return $result;
         } else {
             if (!is_dir($this->path)) {
-                $result = [
+                return [
                     'error' => Yii::t('vova07/imperavi', '{path} is not a dir', [
                         'path' => $this->path,
                     ]),
                 ];
             } else {
                 if (!is_writable($this->path)) {
-                    $result = [
+                    return [
                         'error' => Yii::t('vova07/imperavi', '{path} is not writable', [
                             'path' => $this->path,
                         ]),
                     ];
                 }
             }
-            return $result;
         }
         
         if (Yii::$app->request->isPost) {
@@ -229,6 +227,10 @@ class LocalUploadFileAction extends Action
                             ]),
                         ];
                     }
+                } else {
+                    $result = [
+                        'error' => $file->error,
+                    ];
                 }
             }
             return $result;
@@ -292,7 +294,7 @@ class LocalUploadFileAction extends Action
         $model->member_id = $postData['x:member_id'] ?? 0;
         $model->drive = 'local';
         $model->specific_type = $file->type;
-        $model->name = $_originFileName;
+        $model->name = $this->_originFileName;
         $model->size = $file->size;
         $model->path = $filename;
         $model->extension = $ext;
